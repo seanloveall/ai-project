@@ -1,0 +1,2 @@
+testfile.jpg 0
+testfile2.jpg 0
