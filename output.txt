@@ -1,2 +1,10 @@
-test2file.jpg 0
-test2file2.jpg 0
+C:/Python27/photos/accordion/image_0051.jpg 0
+C:/Python27/photos/accordion/image_0052.jpg 0
+C:/Python27/photos/accordion/image_0053.jpg 0
+C:/Python27/photos/accordion/image_0054.jpg 0
+C:/Python27/photos/accordion/image_0055.jpg 0
+C:/Python27/photos/brain/image_0051.jpg 0
+C:/Python27/photos/brain/image_0052.jpg 0
+C:/Python27/photos/brain/image_0053.jpg 0
+C:/Python27/photos/brain/image_0054.jpg 0
+C:/Python27/photos/brain/image_0055.jpg 0
