@@ -27,26 +27,29 @@ def resize_and_crop(img, size, crop_type='middle'):
     ratio = float(nwidth) / nheight
     
     
-    #Scales either vertically or horizontally and then crop the image
+    #Scales either vertically or horizontally and then crops the image
     if ratio > img_ratio:
-        #scale vertically
+        #scales vertically
         img = img.resize((nwidth, iround(nheight * img_ratio)), Image.ANTIALIAS)
 
-        #crop in the middle
+        #crops in the middle
         box = (0, iround((img.size[1] - nheight) / 2), nwidth, iround((img.size[1] + nheight) / 2))
         img = img.crop(box)
     elif ratio < img_ratio:
-        #scale horizontally
+        #scales horizontally
         img = img.resize((iround(size[0] * img_ratio), size[1]), Image.ANTIALIAS)
 
         #crops in the middle
         box = (iround((img.size[0] - nwidth) / 2), 0, iround((img.size[0] + nwidth) / 2), nheight)
         img = img.crop(box)
     else :
-        #scale 1:1
+        #scales 1:1
         img = img.resize((nwidth, nheight), Image.ANTIALIAS)
         
     return img
+
+def filterList(arr, num):
+    return filter(lambda x: x[1] == num, arr)
     
 
 if(len(sys.argv) != 5):
@@ -65,13 +68,21 @@ with open(sys.argv[2]) as inputfile:
     unknownfiles = inputfile.read().split('\n')
 
 #split up each line, also remove any lines that are empty
+list0 = []
+list1 = []
 i = 0
 while i < len(knownfiles):
     if(knownfiles[i] == ""):
-        knownfiles.pop(i)
-    else:
-        knownfiles[i] = [knownfiles[i][:-2], knownfiles[i][-1:]]
         i = i + 1
+    else:
+        num = knownfiles[i][-1:]
+        if(int(num) == 0):
+            list0.append(knownfiles[i][:-2])
+        elif(int(num) == 1):
+            list1.append(knownfiles[i][:-2])
+
+        i = i + 1
+
 
 #add a value for each line, also remove any lines that are empty
 i = 0
@@ -88,10 +99,11 @@ while i < len(unknownfiles):
 
 #### BEGIN SEAN ####
 i = 0
-avg = [0, 0, 0]
+avg = [[0 for x in range(50)] for x in range(50)] 
+        
 #while i < len(knownfiles):
 
-image = Image.open(knownfiles[2][0])
+image = Image.open(list0[4])
 image = grayscale_image(image)
 image = image.filter(ImageFilter.BLUR)
 image = resize_and_crop(image, (100, 100))
