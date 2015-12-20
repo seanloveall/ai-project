@@ -100,12 +100,11 @@ if(sys.argv[4] == '1'):
     avg0 = [[0 for x in range(50)] for x in range(50)] 
     avg1 = [[0 for x in range(50)] for x in range(50)] 
     while i < len(list0):
-        print i
-        print 
         image = Image.open(list0[i])
+        image = image.convert('RGB')
+        image = resize_and_crop(image, (50, 50))
         image = grayscale_image(image)
         image = image.filter(ImageFilter.BLUR)
-        image = resize_and_crop(image, (50, 50))
         
         width, height = image.size
         for x in range(width):
@@ -115,7 +114,73 @@ if(sys.argv[4] == '1'):
                 
         i = i + 1
 
-    print avg0[30][20]
+    while i < len(list1):
+        image = Image.open(list1[i])
+        image = image.convert('RGB')
+        image = resize_and_crop(image, (50, 50))
+        image = grayscale_image(image)
+        image = image.filter(ImageFilter.BLUR)
+        
+        width, height = image.size
+        for x in range(width):
+            for y in range(height):
+                red, green, blue = image.getpixel((x, y))
+                avg1[x][y] += red
+                
+        i = i + 1
+
+    for x in range(len(avg0)):
+        for y in range(len(avg0[0])):
+            avg0[x][y] = avg0[x][y] / 50
+
+    for x in range(len(avg1)):
+        for y in range(len(avg1[0])):
+            avg1[x][y] = avg1[x][y] / 50
+
+    i = 0
+    while i < len(unknownfiles):
+        image = Image.open(unknownfiles[i][0])
+        image = image.convert('RGB')
+        image = resize_and_crop(image, (50, 50))
+        image = grayscale_image(image)
+        image = image.filter(ImageFilter.BLUR)
+
+        score0 = 0
+        score1 = 0
+
+        width, height = image.size
+        for x in range(width):
+            for y in range(height):
+                red, green, blue = image.getpixel((x, y))
+                num = abs(avg0[x][y] - red)
+                num = float(num) / 255
+                score0 = score0 + (1 - (1 * num))
+
+                num = abs(avg1[x][y] - red)
+                num = float(num) / 255
+                score1 = score1 + (1 - (1 * num))
+
+        pix = 50 * 50
+        print score0
+        print score1
+        if(score0 > score1):
+            num = score0 / pix
+            num = abs(num - 0.5)
+            unknownfiles[i][1] = "0-"+str(num)
+        else:
+            num = score1 / pix
+            if(num <= 0.5):
+                num = num + 0.5
+            unknownfiles[i][1] = "1-"+str(num)
+
+        #unknownfiles[i][1] = num
+
+        i = i + 1
+
+        #take the absolute of average - image, the closer it is to 0, the more we add to score (anywhere between 0 and 100)
+        #when done checking all pixels, take the score, average them, and that's our first score
+        #repeat above for second score
+        #then compare the scores, and the higher one score is, the more the it will lean that way
 
     #image = Image.open(list0[4])
     #image = grayscale_image(image)
