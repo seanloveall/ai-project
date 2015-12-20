@@ -192,7 +192,63 @@ if(sys.argv[4] == '1'):
     ####
 elif(sys.argv[4] == '2'):
     # scott
-    print("hi scott")
+    i = 0
+    avg0 = [[0 for x in range(50)] for x in range(50)] 
+    avg1 = [[0 for x in range(50)] for x in range(50)]
+    count0 = 2500/len(list0)
+    count1 = 2500/len(list1)
+    x = 0
+    y = 0
+    while i < len(list0):
+        image = Image.open(list0[i])
+        image = image.convert('RGB')
+        image = grayscale_image(image)
+        image = image.filter(ImageFilter.BLUR)
+        image = resize_and_crop(image, (50, 50))
+        
+        width, height = image.size
+        for j in range(count0):
+            #print x
+            #print y
+            avg0[x][y] = image.getpixel((x, y))
+            if(x == 49 and y == 49):
+                break
+            elif(y == 49):
+                x += 1
+                y = 0
+            else:
+                y += 1
+
+        i = i + 1
+
+    #starting to create it for list1
+    x = 0
+    y = 0
+    i = 0
+    while i < len(list1):
+        image = Image.open(list1[i])
+        image = image.convert('RGB')
+        image = grayscale_image(image)
+        image = image.filter(ImageFilter.BLUR)
+        image = resize_and_crop(image, (50, 50))
+        
+        width, height = image.size
+        for j in range(count1):
+            #print x
+            #print y
+            avg1[x][y] = image.getpixel((x, y))
+            if(x == 49 and y == 49):
+                break
+            elif(y == 49):
+                x += 1
+                y = 0
+            else:
+                y += 1
+
+        i = i + 1
+    
+    print avg0
+    print avg1
 elif(sys.argv[4] == '3'):
     # rafi
     print("hi rafi")
