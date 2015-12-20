@@ -48,8 +48,6 @@ def resize_and_crop(img, size, crop_type='middle'):
         
     return img
 
-def filterList(arr, num):
-    return filter(lambda x: x[1] == num, arr)
     
 
 if(len(sys.argv) != 5):
