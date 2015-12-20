@@ -95,20 +95,26 @@ while i < len(unknownfiles):
 
 
 #magic happens here
-        
 
-#### BEGIN SEAN ####
-i = 0
-avg = [[0 for x in range(50)] for x in range(50)] 
+if(sys.argv[4] == '1'):
+    #### sean
+    i = 0
+    avg = [[0 for x in range(50)] for x in range(50)] 
         
-#while i < len(knownfiles):
+    #while i < len(knownfiles):
 
-image = Image.open(list0[4])
-image = grayscale_image(image)
-image = image.filter(ImageFilter.BLUR)
-image = resize_and_crop(image, (100, 100))
-image.save("C:/Python27/test.jpg")
-#### END SEAN ####
+    image = Image.open(list0[4])
+    image = grayscale_image(image)
+    image = image.filter(ImageFilter.BLUR)
+    image = resize_and_crop(image, (100, 100))
+    image.save("C:/Python27/test.jpg")
+    ####
+elif(sys.argv[4] == '2'):
+    # scott
+    print("hi scott")
+elif(sys.argv[4] == '3'):
+    # rafi
+    print("hi rafi")
 
 
 
