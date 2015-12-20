@@ -20,7 +20,7 @@ def grayscale_image(img):
             
     return img
 
-def resize_and_crop(img, size, crop_type='middle'):
+def resize_and_crop(img, size):
     width, height = img.size
     img_ratio = float(width) / height
     nwidth, nheight = size
@@ -97,15 +97,31 @@ while i < len(unknownfiles):
 if(sys.argv[4] == '1'):
     #### sean
     i = 0
-    avg = [[0 for x in range(50)] for x in range(50)] 
+    avg0 = [[0 for x in range(50)] for x in range(50)] 
+    avg1 = [[0 for x in range(50)] for x in range(50)] 
+    while i < len(list0):
+        print i
+        print 
+        image = Image.open(list0[i])
+        image = grayscale_image(image)
+        image = image.filter(ImageFilter.BLUR)
+        image = resize_and_crop(image, (50, 50))
         
-    #while i < len(knownfiles):
+        width, height = image.size
+        for x in range(width):
+            for y in range(height):
+                red, green, blue = image.getpixel((x, y))
+                avg0[x][y] += red
+                
+        i = i + 1
 
-    image = Image.open(list0[4])
-    image = grayscale_image(image)
-    image = image.filter(ImageFilter.BLUR)
-    image = resize_and_crop(image, (100, 100))
-    image.save("C:/Python27/test.jpg")
+    print avg0[30][20]
+
+    #image = Image.open(list0[4])
+    #image = grayscale_image(image)
+    #image = image.filter(ImageFilter.BLUR)
+    #image = resize_and_crop(image, (100, 100))
+    #image.save("C:/Python27/test.jpg")
     ####
 elif(sys.argv[4] == '2'):
     # scott
