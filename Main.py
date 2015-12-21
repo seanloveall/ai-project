@@ -1,10 +1,14 @@
 import sys
+import math
 
 from PIL import Image
 from PIL import ImageFilter
 
 def iround(num):
     return int(round(num))
+
+def ifloor(num):
+    return int(math.floor(num))
 
 def grayscale_image(img):
     width, height = img.size
@@ -30,17 +34,17 @@ def resize_and_crop(img, size):
     #Scales either vertically or horizontally and then crops the image
     if ratio > img_ratio:
         #scales vertically
-        img = img.resize((nwidth, iround(nheight * img_ratio)), Image.ANTIALIAS)
+        img = img.resize((nwidth, ifloor(nheight * img_ratio)), Image.ANTIALIAS)
 
         #crops in the middle
-        box = (0, iround((img.size[1] - nheight) / 2), nwidth, iround((img.size[1] + nheight) / 2))
+        box = (0, ifloor((img.size[1] - nheight) / 2), nwidth, ifloor((img.size[1] + nheight) / 2))
         img = img.crop(box)
     elif ratio < img_ratio:
         #scales horizontally
-        img = img.resize((iround(size[0] * img_ratio), size[1]), Image.ANTIALIAS)
+        img = img.resize((ifloor(size[0] * img_ratio), size[1]), Image.ANTIALIAS)
 
         #crops in the middle
-        box = (iround((img.size[0] - nwidth) / 2), 0, iround((img.size[0] + nwidth) / 2), nheight)
+        box = (ifloor((img.size[0] - nwidth) / 2), 0, ifloor((img.size[0] + nwidth) / 2), nheight)
         img = img.crop(box)
     else :
         #scales 1:1
@@ -98,7 +102,7 @@ if(sys.argv[4] == '1'):
     #### sean
     i = 0
     size = 50
-    moe = 40 #margin of error
+    moe = 20 #margin of error
     avg0 = []
     avg1 = []
     avg0.append([[0 for x in range(size)] for x in range(size)])
