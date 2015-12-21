@@ -225,6 +225,26 @@ elif(sys.argv[4] == '2'):
 
         i = i + 1
 
+    if(x != 49 or y != 50):
+        while(x != 49 or y != 50):
+            image = Image.open(list0[i-1])
+            image = image.convert('RGB')
+            image = grayscale_image(image)
+            image = image.filter(ImageFilter.BLUR)
+            image = resize_and_crop(image, (50, 50))
+        
+            width, height = image.size
+            #print x
+            #print y
+            avg0[x][y] = image.getpixel((x, y))
+            if(x == 49 and y == 49):
+                break
+            elif(y == 49):
+                 x += 1
+                 y = 0
+            else:
+                 y += 1
+
     #starting to create it for list1
     x = 0
     y = 0
@@ -238,8 +258,6 @@ elif(sys.argv[4] == '2'):
         
         width, height = image.size
         for j in range(count1):
-            #print x
-            #print y
             avg1[x][y] = image.getpixel((x, y))
             if(x == 49 and y == 49):
                 break
@@ -250,6 +268,29 @@ elif(sys.argv[4] == '2'):
                 y += 1
 
         i = i + 1
+
+    if(x != 49 or y != 50):
+        while(x != 49 or y != 50):
+            image = Image.open(list1[i-1])
+            image = image.convert('RGB')
+            image = grayscale_image(image)
+            image = image.filter(ImageFilter.BLUR)
+            image = resize_and_crop(image, (50, 50))
+        
+            width, height = image.size
+            avg1[x][y] = image.getpixel((x, y))
+            if(x == 49 and y == 49):
+                break
+            elif(y == 49):
+                x += 1
+                y = 0
+            else:
+                y += 1
+
+    #print avg0
+    #print avg1
+    #print x
+    #print y
 
     #Learing complete. Beginning to compare with unknown images
     i = 0
