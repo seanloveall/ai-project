@@ -12,19 +12,22 @@ from PIL import ImageFilter
 #            "C:/Users/rpcoo/Documents/GitHub/ai-project/test/output.txt", "3" ]
 
 def iround(num):
+    #returns an int that has been rounded
     return int(round(num))
 
 def ifloor(num):
+    #returns an int that has been floored
     return int(math.floor(num))
 
 def grayscale_image(img):
+    #returns an image that is grayscale
     width, height = img.size
     
     for x in range(width):
         for y in range(height):
             red, green, blue = img.getpixel((x, y))
 
-            #formula found on the web to convert to grayscale
+            #formula to convert color to grayscale
             col = iround(0.3 * red + 0.59 * green + 0.11 * blue)
             
             img.putpixel((x, y), (col, col, col))
@@ -32,6 +35,7 @@ def grayscale_image(img):
     return img
 
 def resize_and_crop(img, size):
+    #returns an image that has been resized and cropped to specified size
     width, height = img.size
     img_ratio = float(width) / height
     nwidth, nheight = size
@@ -102,19 +106,22 @@ while i < len(unknownfiles):
         i = i + 1
 
 
-#magic happens here
+#begin pattern recognition algorithms
 
 if(sys.argv[4] == '1'):
     #### sean
     i = 0
-    size = 50
+    size = 50 #images will be reduced to size x size
     moe = 20 #margin of error
     avg0 = []
     avg1 = []
     avg0.append([[0 for x in range(size)] for x in range(size)])
     avg1.append([[0 for x in range(size)] for x in range(size)])
-    images0 = [0]
-    images1 = [0]
+    images0 = [0] #keeps track of the total number of photos per average
+    images1 = [0] #same as above
+    print "Begin learning..."
+
+    #Learning from the first dataset
     while i < len(list0):
         score = [0]
         flag = 0
@@ -134,9 +141,9 @@ if(sys.argv[4] == '1'):
                 if(abs((avg0[0][x][y] / (i+1)) - red) > moe): #if the difference is greater than margin of error,
                     flag += 1                                   #then add to another average as well or create a new average
                     for a in range(len(avg0)):
-                        if a == 0: #this is the total average so ignore
+                        if a == 0: #skipping total average
                             continue
-                        elif(abs((avg0[a][x][y] / (i+1)) - red) <= moe): #if within margin of error then add to score
+                        elif(abs((avg0[a][x][y] / (i+1)) - red) <= moe): #if within margin of error, then add to score
                             if(a < len(score)):
                                 score[a] += 1
                             else:   
@@ -152,7 +159,7 @@ if(sys.argv[4] == '1'):
             for a in range(len(score)):
                 if a == 0:  #skipping total average
                     continue
-                elif(score[a] >= compare):
+                elif(score[a] >= compare): #if score is higher than the compare, then we'll use this one
                     good = 1
                     images0[a] += 1
                     for x in range(width):
@@ -160,7 +167,7 @@ if(sys.argv[4] == '1'):
                             red, green, blue = image.getpixel((x, y))
                             avg0[a][x][y] += red
                     break
-            if(good == 0):
+            if(good == 0): #if a score wasn't high enough to beat the comparison above, then create a new average
                 avg0.append([[0 for x in range(size)] for x in range(size)])
                 images0.append(1)
                 a = len(avg0) - 1
@@ -170,12 +177,9 @@ if(sys.argv[4] == '1'):
                         avg0[a][x][y] += red
         i = i + 1
 
-    print "Done with list 0"
-    print len(avg0)
-    print len(images0)
-    print images0
+    print "Finished learning from first dataset..."
 
-    
+    #Learning from the second dataset
     i = 0
     while i < len(list1):
         score = [0]
@@ -196,9 +200,9 @@ if(sys.argv[4] == '1'):
                 if(abs((avg1[0][x][y] / (i+1)) - red) > moe): #if the difference is greater than margin of error,
                     flag += 1                                    #then add to another average as well or create a new average
                     for a in range(len(avg1)):
-                        if a == 0: #this is the total average
+                        if a == 0: #skipping total average
                             continue
-                        elif(abs((avg1[a][x][y] / (i+1)) - red) <= moe):
+                        elif(abs((avg1[a][x][y] / (i+1)) - red) <= moe): #if within margin of error, then add to score
                             if(a < len(score)):
                                 score[a] += 1
                             else:
@@ -209,12 +213,12 @@ if(sys.argv[4] == '1'):
                 
         compare = round(size * size / 4)
         good = 0
-        #print score
+        
         if(flag >= compare):
             for a in range(len(score)):
                 if a == 0:  #skipping total average
                     continue
-                elif(score[a] >= compare):
+                elif(score[a] >= compare): #if score is higher than the compare, then we'll use this one
                     good = 1
                     images1[a] += 1
                     for x in range(width):
@@ -222,7 +226,7 @@ if(sys.argv[4] == '1'):
                             red, green, blue = image.getpixel((x, y))
                             avg1[a][x][y] += red
                     break
-            if(good == 0):
+            if(good == 0): #if a score wasn't high enough to beat the comparison above, then create a new average
                 avg1.append([[0 for x in range(size)] for x in range(size)])
                 images1.append(1)
                 a = len(avg1) - 1
@@ -232,24 +236,24 @@ if(sys.argv[4] == '1'):
                         avg1[a][x][y] += red
         i = i + 1
 
-    print "Done with list 1"
-    print len(avg1)
-    print len(images1)
-    print images1
+    print "Finished learning from second dataset..."
 
+    print "Checking unknown photos..."
+
+    #computing the average for each total sum
     for x in range(len(avg0[0])):
         for y in range(len(avg0[0])):
             for z in range(len(avg0)):
                 avg0[z][x][y] = avg0[z][x][y] / images0[z]
-            #avg0[0][x][y] = avg0[0][x][y] / len(list0)
 
+    #computing the average for each total sum
     for x in range(len(avg1[0])):
         for y in range(len(avg1[0])):
             for z in range(len(avg1)):
                 avg1[z][x][y] = avg1[z][x][y] / images1[z]
-            #avg1[0][x][y] = avg1[0][x][y] / len(list1)
 
 
+    #comparing the unknown files against the datasets to see what type the unknown file is
     i = 0
     while i < len(unknownfiles):
         image = Image.open(unknownfiles[i][0])
@@ -265,49 +269,52 @@ if(sys.argv[4] == '1'):
         for x in range(width):
             for y in range(height):
                 red, green, blue = image.getpixel((x, y))
+
+                #check first dataset
                 num = abs(avg0[0][x][y] - red)
-                if(num <= moe): 
+                if(num <= moe): #if within margin of error, give it a bonus point
                     score0 += 1
                 num = float(num) / 255
                 score0 = score0 + (1 - num)
 
-                for a in range(len(avg0)):
-                    if a == 0:
+                for a in range(len(avg0)): #compare against other averages
+                    if a == 0: #skip total average since it was already done above
                         continue
-                    elif images0[a] == 1:
+                    elif images0[a] == 1: #if only one image is in this average, then lower the margin of error
                         num = abs(avg0[a][x][y] - red)
                         if(num <= (moe/2)):
                             num = float(num) / 255
-                            score0 = score0 + ((1 - num) * 2)
+                            score0 = score0 + ((1 - num) * 2) #weighted if within the more restricted margin of error
                     else:
                         num = abs(avg0[a][x][y] - red)
-                        if(num <= moe):
+                        if(num <= moe): #if within margin of error, then add to score (weighted)
                             num = float(num) / 255
                             score0 = score0 + ((1 - num) * images0[a])
 
+
+                #check second dataset
                 num = abs(avg1[0][x][y] - red)
                 if(num <= moe):
                     score1 += 1
                 num = float(num) / 255
                 score1 = score1 + (1 - num)
 
-                for a in range(len(avg1)):
+                for a in range(len(avg1)): #compare against other averages
                     if a == 0:
                         continue
-                    elif images1[a] == 1:
+                    elif images1[a] == 1: #if only one image is in this average, then lower the margin of error
                         num = abs(avg1[a][x][y] - red)
                         if(num <= (moe/2)):
                             num = float(num) / 255
-                            score1 = score1 + ((1 - num) * 2)
+                            score1 = score1 + ((1 - num) * 2) #weighted if within the more restricted margin of error
                     else:
                         num = abs(avg1[a][x][y] - red)
-                        if(num <= moe):
+                        if(num <= moe): #if within margin of error, then add to score (weighted)
                             num = float(num) / 255
                             score1 = score1 + ((1 - num) * images1[a])
 
         pix = size * size
-        print score0
-        print score1
+        #compare the scores to see which dataset the unknown photo most likely belongs to
         if(score0 > score1):
             maxscore = 0
             for a in range(len(images0)):
@@ -317,7 +324,6 @@ if(sys.argv[4] == '1'):
             maxscore = size * size * 2 * maxscore
             num = score0 / maxscore
             num = abs(num - 0.5)
-            unknownfiles[i][1] = "0-"+str(num)
         else:
             maxscore = 0
             for a in range(len(images1)):
@@ -328,22 +334,14 @@ if(sys.argv[4] == '1'):
             num = score1 / maxscore
             if(num <= 0.5):
                 num = num + 0.5
-            unknownfiles[i][1] = "1-"+str(num)
 
-        #unknownfiles[i][1] = num
+        unknownfiles[i][1] = round(num, 2)
+
 
         i = i + 1
 
-        #take the absolute of average - image, the closer it is to 0, the more we add to score (anywhere between 0 and 100)
-        #when done checking all pixels, take the score, average them, and that's our first score
-        #repeat above for second score
-        #then compare the scores, and the higher one score is, the more the it will lean that way
+    print "Finished comparing..."
 
-    #image = Image.open(list0[4])
-    #image = grayscale_image(image)
-    #image = image.filter(ImageFilter.BLUR)
-    #image = resize_and_crop(image, (100, 100))
-    #image.save("C:/Python27/test.jpg")
     ####
 elif(sys.argv[4] == '2'):
     # scoot
@@ -567,3 +565,4 @@ with open(sys.argv[3], 'w+') as outputfile:
     for elem in unknownfiles:
         outputfile.write(" ".join(str(v) for v in elem))
         outputfile.write("\n")
+print "Results has been written into the output file."
