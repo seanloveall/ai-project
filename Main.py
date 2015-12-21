@@ -466,12 +466,7 @@ elif(sys.argv[4] == '2'):
         i = i + 1
     
     #print avg0
-<<<<<<< HEAD
     #print avg1   
-=======
-    #print avg1    
-
->>>>>>> origin/master
 elif(sys.argv[4] == '3'):
     # rafi
     print("hi rafi")
