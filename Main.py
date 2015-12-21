@@ -1,8 +1,14 @@
+from __future__ import division
 import sys
 import math
 
 from PIL import Image
 from PIL import ImageFilter
+
+sys.argv = ["placeholder",
+            "C:/Users/rpcoo/Documents/GitHub/ai-project/input.txt",
+            "C:/Users/rpcoo/Documents/GitHub/ai-project/input2.txt",
+            "C:/Users/rpcoo/Documents/GitHub/ai-project/test/output.txt", "3" ]
 
 def iround(num):
     return int(round(num))
@@ -493,9 +499,47 @@ elif(sys.argv[4] == '2'):
     #print avg1   
 elif(sys.argv[4] == '3'):
     # rafi
+    
     print("hi rafi")
 
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from sklearn import datasets, svm
+    import pylab as pl
 
+    i = 0
+    n_images = len(list0) + len(list1)
+    kdataset = np.zeros((n_images,50,50), dtype=np.float32)
+    while i < n_images:
+
+        if(i< len(list0)):
+            image = Image.open(list0[i])
+        else:
+            image = Image.open(list1[i-(len(list0))])
+        image = image.convert('RGB')
+        image = grayscale_image(image)
+        image = resize_and_crop(image, (50, 50))
+        data = np.asarray(image, dtype=np.float32 )
+        data /= 255.0
+        data = data.mean(axis=2)
+        #print data[0]
+        kdataset[i, ...] = data
+        i = i + 1
+        
+    re = kdataset.reshape((n_images, -1))
+    print re
+
+    a = np.zeros((len(list0),), dtype=np.int)
+    b = np.ones((len(list1),), dtype=np.int)
+    targets = np.concatenate((a,b),axis=0)
+    #print targets
+    
+    classifier = svm.SVC(gamma=0.001)
+    classifier.fit(re,targets)
+
+    #predicted = classifier.predict(unknownfiles)
+    
+    digits = datasets.load_digits()
 
 
 #outputs the data
