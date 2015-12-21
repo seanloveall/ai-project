@@ -126,14 +126,14 @@ if(sys.argv[4] == '1'):
                 avg0[0][x][y] += red
                 
                 if(abs((avg0[0][x][y] / (i+1)) - red) > moe): #if the difference is greater than margin of error,
-                    flag += 1                        #then add to another average as well or create a new average
+                    flag += 1                                   #then add to another average as well or create a new average
                     for a in range(len(avg0)):
-                        if a == 0: #this is the total average
+                        if a == 0: #this is the total average so ignore
                             continue
-                        elif(abs((avg0[a][x][y] / (i+1)) - red) <= moe):
+                        elif(abs((avg0[a][x][y] / (i+1)) - red) <= moe): #if within margin of error then add to score
                             if(a < len(score)):
                                 score[a] += 1
-                            else:
+                            else:   
                                  while a < len(score):
                                      score.append(0)
                                  score.append(1)
@@ -188,7 +188,7 @@ if(sys.argv[4] == '1'):
                 avg1[0][x][y] += red
                 
                 if(abs((avg1[0][x][y] / (i+1)) - red) > moe): #if the difference is greater than margin of error,
-                    flag += 1                        #then add to another average as well or create a new average
+                    flag += 1                                    #then add to another average as well or create a new average
                     for a in range(len(avg1)):
                         if a == 0: #this is the total average
                             continue
@@ -269,11 +269,15 @@ if(sys.argv[4] == '1'):
                     if a == 0:
                         continue
                     elif images0[a] == 1:
-                        continue
-                    num = abs(avg0[a][x][y] - red)
-                    if(num <= moe):
-                        num = float(num) / 255
-                        score0 = score0 + ((1 - num) * images0[a])
+                        num = abs(avg0[a][x][y] - red)
+                        if(num <= (moe/2)):
+                            num = float(num) / 255
+                            score0 = score0 + ((1 - num) * 2)
+                    else:
+                        num = abs(avg0[a][x][y] - red)
+                        if(num <= moe):
+                            num = float(num) / 255
+                            score0 = score0 + ((1 - num) * images0[a])
 
                 num = abs(avg1[0][x][y] - red)
                 if(num <= moe):
@@ -285,21 +289,37 @@ if(sys.argv[4] == '1'):
                     if a == 0:
                         continue
                     elif images1[a] == 1:
-                        continue
-                    num = abs(avg1[a][x][y] - red)
-                    if(num <= moe):
-                        num = float(num) / 255
-                        score1 = score1 + ((1 - num) * images1[a])
+                        num = abs(avg1[a][x][y] - red)
+                        if(num <= (moe/2)):
+                            num = float(num) / 255
+                            score1 = score1 + ((1 - num) * 2)
+                    else:
+                        num = abs(avg1[a][x][y] - red)
+                        if(num <= moe):
+                            num = float(num) / 255
+                            score1 = score1 + ((1 - num) * images1[a])
 
         pix = size * size
         print score0
         print score1
         if(score0 > score1):
-            num = score0 / pix
+            maxscore = 0
+            for a in range(len(images0)):
+                if a == 0:
+                    continue
+                maxscore += images0[a]
+            maxscore = size * size * 2 * maxscore
+            num = score0 / maxscore
             num = abs(num - 0.5)
             unknownfiles[i][1] = "0-"+str(num)
         else:
-            num = score1 / pix
+            maxscore = 0
+            for a in range(len(images1)):
+                if a == 0:
+                    continue
+                maxscore += images1[a]
+            maxscore = size * size * 2 * maxscore
+            num = score1 / maxscore
             if(num <= 0.5):
                 num = num + 0.5
             unknownfiles[i][1] = "1-"+str(num)
