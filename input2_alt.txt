@@ -1,0 +1,10 @@
+C:/Python27/photos/accordion/image_0051.jpg
+C:/Python27/photos/accordion/image_0052.jpg
+C:/Python27/photos/accordion/image_0053.jpg
+C:/Python27/photos/accordion/image_0054.jpg
+C:/Python27/photos/accordion/image_0055.jpg
+C:/Python27/photos/airplanes/image_0051.jpg
+C:/Python27/photos/airplanes/image_0052.jpg
+C:/Python27/photos/airplanes/image_0053.jpg
+C:/Python27/photos/airplanes/image_0054.jpg
+C:/Python27/photos/airplanes/image_0055.jpg
