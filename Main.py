@@ -97,12 +97,15 @@ while i < len(unknownfiles):
 if(sys.argv[4] == '1'):
     #### sean
     i = 0
-    avg0 = [[0 for x in range(50)] for x in range(50)] 
-    avg1 = [[0 for x in range(50)] for x in range(50)] 
+    size = 50
+    avg0 = []
+    avg1 = []
+    avg0.append([[0 for x in range(size)] for x in range(size)])
+    avg1.append([[0 for x in range(size)] for x in range(size)])
     while i < len(list0):
         image = Image.open(list0[i])
         image = image.convert('RGB')
-        image = resize_and_crop(image, (50, 50))
+        image = resize_and_crop(image, (size, size))
         image = grayscale_image(image)
         image = image.filter(ImageFilter.BLUR)
         
@@ -110,7 +113,8 @@ if(sys.argv[4] == '1'):
         for x in range(width):
             for y in range(height):
                 red, green, blue = image.getpixel((x, y))
-                avg0[x][y] += red
+                avg0[0][x][y] += red
+
                 
         i = i + 1
 
@@ -118,7 +122,7 @@ if(sys.argv[4] == '1'):
     while i < len(list1):
         image = Image.open(list1[i])
         image = image.convert('RGB')
-        image = resize_and_crop(image, (50, 50))
+        image = resize_and_crop(image, (size, size))
         image = grayscale_image(image)
         image = image.filter(ImageFilter.BLUR)
         
@@ -126,24 +130,24 @@ if(sys.argv[4] == '1'):
         for x in range(width):
             for y in range(height):
                 red, green, blue = image.getpixel((x, y))
-                avg1[x][y] += red
+                avg1[0][x][y] += red
                 
         i = i + 1
 
-    for x in range(len(avg0)):
+    for x in range(len(avg0[0])):
         for y in range(len(avg0[0])):
-            avg0[x][y] = avg0[x][y] / 50
+            avg0[0][x][y] = avg0[0][x][y] / len(list0)
 
-    for x in range(len(avg1)):
+    for x in range(len(avg1[0])):
         for y in range(len(avg1[0])):
-            avg1[x][y] = avg1[x][y] / 50
+            avg1[0][x][y] = avg1[0][x][y] / len(list1)
 
 
     i = 0
     while i < len(unknownfiles):
         image = Image.open(unknownfiles[i][0])
         image = image.convert('RGB')
-        image = resize_and_crop(image, (50, 50))
+        image = resize_and_crop(image, (size, size))
         image = grayscale_image(image)
         image = image.filter(ImageFilter.BLUR)
 
@@ -154,15 +158,15 @@ if(sys.argv[4] == '1'):
         for x in range(width):
             for y in range(height):
                 red, green, blue = image.getpixel((x, y))
-                num = abs(avg0[x][y] - red)
+                num = abs(avg0[0][x][y] - red)
                 num = float(num) / 255
-                score0 = score0 + (1 - (1 * num))
+                score0 = score0 + (1 - num)
 
-                num = abs(avg1[x][y] - red)
+                num = abs(avg1[0][x][y] - red)
                 num = float(num) / 255
-                score1 = score1 + (1 - (1 * num))
+                score1 = score1 + (1 - num)
 
-        pix = 50 * 50
+        pix = size * size
         print score0
         print score1
         if(score0 > score1):
