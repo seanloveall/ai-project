@@ -250,9 +250,62 @@ elif(sys.argv[4] == '2'):
                 y += 1
 
         i = i + 1
+
+    #Learing complete. Beginning to compare with unknown images
+    i = 0
+    while i < len(unknownfiles):
+        image = Image.open(unknownfiles[i][0])
+        image = image.convert('RGB')
+        image = resize_and_crop(image, (50, 50))
+        image = grayscale_image(image)
+        image = image.filter(ImageFilter.BLUR)
+
+        score = 0
+        score0 = 0
+        score1 = 0
+        width, height = image.size
+        for x in range(width):
+            for y in range(height):
+                temp0 = 0
+                temp1 = 0
+                red, green, blue = image.getpixel((x, y))
+                temp0 = abs(avg0[x][y][0] - red)
+                temp0 = temp0 + abs(avg0[x][y][1] - green)
+                temp0 = temp0 + abs(avg0[x][y][2] - blue)
+
+                temp1 = abs(avg1[x][y][0] - red)
+                temp1 = temp1 + abs(avg1[x][y][1] - green)
+                temp1 = temp1 + abs(avg1[x][y][2] - blue)
+
+                if(temp0 < temp1):
+                    score0 = score0 + 1
+                elif(temp1 < temp0):
+                    #score1 = score1 + 1
+                    score = score + 1
+
+
+        pix = 50 * 50
+        print score0
+        print score1
+        num = float(score)/float(pix)
+        if(num < 0.5):
+            #num = float(score0) / float(pix)
+            #num = abs(num - 0.5)
+            unknownfiles[i][1] = "0-"+str(num)
+        else:
+            #num = float(score1) / float(pix)
+            #if(num <= 0.5):
+              #num = num + 0.5
+            unknownfiles[i][1] = "1-"+str(num)
+
+        #
+        #print unknownfiles[i][0], " ", (float(score)/float(2500))
+        #print score, " ", score2
+        i = i + 1
     
-    print avg0
-    print avg1
+    #print avg0
+    #print avg1    
+
 elif(sys.argv[4] == '3'):
     # rafi
     print("hi rafi")
