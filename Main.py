@@ -5,10 +5,11 @@ import math
 from PIL import Image
 from PIL import ImageFilter
 
-sys.argv = ["placeholder",
-            "C:/Users/rpcoo/Documents/GitHub/ai-project/input.txt",
-            "C:/Users/rpcoo/Documents/GitHub/ai-project/input2.txt",
-            "C:/Users/rpcoo/Documents/GitHub/ai-project/test/output.txt", "3" ]
+#    shortcut for lazy rafi
+#sys.argv = ["placeholder",
+#            "C:/Users/rpcoo/Documents/GitHub/ai-project/input.txt",
+#            "C:/Users/rpcoo/Documents/GitHub/ai-project/input2.txt",
+#            "C:/Users/rpcoo/Documents/GitHub/ai-project/test/output.txt", "3" ]
 
 def iround(num):
     return int(round(num))
@@ -90,7 +91,6 @@ while i < len(knownfiles):
             list1.append(knownfiles[i][:-2])
 
         i = i + 1
-
 
 #add a value for each line, also remove any lines that are empty
 i = 0
@@ -346,7 +346,7 @@ if(sys.argv[4] == '1'):
     #image.save("C:/Python27/test.jpg")
     ####
 elif(sys.argv[4] == '2'):
-    # scott
+    # scoot
     i = 0
     avg0 = [[0 for x in range(50)] for x in range(50)] 
     avg1 = [[0 for x in range(50)] for x in range(50)]
@@ -499,14 +499,11 @@ elif(sys.argv[4] == '2'):
     #print avg1   
 elif(sys.argv[4] == '3'):
     # rafi
-    
-    print("hi rafi")
 
     import numpy as np
-    import matplotlib.pyplot as plt
     from sklearn import datasets, svm
-    import pylab as pl
 
+    print "Beginning to learn from images...\n"    
     i = 0
     n_images = len(list0) + len(list1)
     kdataset = np.zeros((n_images,50,50), dtype=np.float32)
@@ -525,9 +522,27 @@ elif(sys.argv[4] == '3'):
         #print data[0]
         kdataset[i, ...] = data
         i = i + 1
-        
-    re = kdataset.reshape((n_images, -1))
-    print re
+    print "     Done.\n"
+    print "Preparing unknown files for recognition.\n"
+
+    j = 0
+    n_uimages = len(unknownfiles) #number of unknown images
+    ukdataset = np.zeros((n_uimages,50,50), dtype=np.float32)
+    while j < n_uimages:
+
+        image = Image.open(unknownfiles[j][0])
+        image = image.convert('RGB')
+        image = grayscale_image(image)
+        image = resize_and_crop(image, (50, 50))
+        udata = np.asarray(image, dtype=np.float32 )
+        udata /= 255.0
+        udata = udata.mean(axis=2)
+        #print data[0]
+        ukdataset[j, ...] = udata
+        j = j + 1
+    print "     Done.\n"
+    kre = kdataset.reshape((n_images, -1)) #known dataset reshaping
+    ukre = ukdataset.reshape((n_uimages,-1)) #unknown dataset reshaping
 
     a = np.zeros((len(list0),), dtype=np.int)
     b = np.ones((len(list1),), dtype=np.int)
@@ -535,12 +550,17 @@ elif(sys.argv[4] == '3'):
     #print targets
     
     classifier = svm.SVC(gamma=0.001)
-    classifier.fit(re,targets)
+    classifier.fit(kre,targets)
 
-    #predicted = classifier.predict(unknownfiles)
-    
-    digits = datasets.load_digits()
+    print "Predicting...\n"
+    predicted = classifier.predict(ukre)
+    print "     Done.\n"
+    print "Here are the results: \n"
+    print predicted
 
+    #assign the predicted values to the "to-be" output file
+    for line in range(len(unknownfiles)):
+         unknownfiles[line][1] = predicted[line]
 
 #outputs the data
 with open(sys.argv[3], 'w+') as outputfile:
