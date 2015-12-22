@@ -360,7 +360,7 @@ elif(sys.argv[4] == '2'):
         image = resize_and_crop(image, (50, 50))
         
         width, height = image.size
-        for j in range(count0):
+        for j in range(int(count0)):
             #print x
             #print y
             avg0[x][y] = image.getpixel((x, y))
@@ -406,7 +406,7 @@ elif(sys.argv[4] == '2'):
         image = resize_and_crop(image, (50, 50))
         
         width, height = image.size
-        for j in range(count1):
+        for j in range(int(count1)):
             avg1[x][y] = image.getpixel((x, y))
             if(x == 49 and y == 49):
                 break
