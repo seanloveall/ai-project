@@ -530,7 +530,7 @@ elif(sys.argv[4] == '3'):
         image = resize_and_crop(image, (50, 50))
         udata = np.asarray(image, dtype=np.float32 )
         udata /= 255.0
-        udata = udata.mean(axis=2)
+        udata = udata.mean(axis=2) 
         #print data[0]
         ukdataset[j, ...] = udata
         j = j + 1
