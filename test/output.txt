@@ -1,10 +1,10 @@
 C:/Python27/photos/accordion/image_0051.jpg 0
-C:/Python27/photos/brain/image_0052.jpg 1
 C:/Python27/photos/accordion/image_0052.jpg 0
-C:/Python27/photos/brain/image_0051.jpg 1
 C:/Python27/photos/accordion/image_0053.jpg 0
-C:/Python27/photos/brain/image_0053.jpg 1
 C:/Python27/photos/accordion/image_0054.jpg 0
 C:/Python27/photos/accordion/image_0055.jpg 0
+C:/Python27/photos/brain/image_0051.jpg 1
+C:/Python27/photos/brain/image_0052.jpg 1
+C:/Python27/photos/brain/image_0053.jpg 1
 C:/Python27/photos/brain/image_0054.jpg 0
 C:/Python27/photos/brain/image_0055.jpg 1

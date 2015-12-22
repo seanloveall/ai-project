@@ -6,10 +6,12 @@ from PIL import Image
 from PIL import ImageFilter
 
 #    shortcut for lazy rafi
-#sys.argv = ["placeholder",
-#            "C:/Users/rpcoo/Documents/GitHub/ai-project/input.txt",
-#            "C:/Users/rpcoo/Documents/GitHub/ai-project/input2.txt",
-#            "C:/Users/rpcoo/Documents/GitHub/ai-project/test/output.txt", "3" ]
+sys.argv = ["placeholder",
+            "C:/Users/rpcoo/Documents/GitHub/ai-project/input.txt",
+            "C:/Users/rpcoo/Documents/GitHub/ai-project/input2.txt",
+            "C:/Users/rpcoo/Documents/GitHub/ai-project/test/output.txt", "3" ]
+
+print "  =====Image Recognition Software=====  \n"
 
 def iround(num):
     #returns an int that has been rounded
@@ -503,33 +505,36 @@ elif(sys.argv[4] == '3'):
     import numpy as np
     from sklearn import datasets, svm
 
-    print "Beginning to learn from images...\n"    
+    print "Learning from images...\n"    
     i = 0
-    n_images = len(list0) + len(list1)
-    kdataset = np.zeros((n_images,50,50), dtype=np.float32)
-    while i < n_images:
-
+    n_images = len(list0) + len(list1) #sum of images to learn from
+    kdataset = np.zeros((n_images,50,50), dtype=np.float32) #known dataset
+    while i < n_images: 
+    #iterate through all images, convert to RGB, grayscale, resize and crop
+    #and convert it into a Numpy array that will be added to the known dataset
+    #array.
         if(i< len(list0)):
             image = Image.open(list0[i])
         else:
-            image = Image.open(list1[i-(len(list0))])
-        image = image.convert('RGB')
+            image = Image.open(list1[i-(len(list0))]) #iterate through list1 when 
+        image = image.convert('RGB')                  #list0 finishes
         image = grayscale_image(image)
         image = resize_and_crop(image, (50, 50))
         data = np.asarray(image, dtype=np.float32 )
-        data /= 255.0
+        data /= 255.0 #normalize the vaules 
         data = data.mean(axis=2)
-        #print data[0]
-        kdataset[i, ...] = data
+        ###print data[0]
+        kdataset[i, ...] = data #add the image representation to the known dataset
         i = i + 1
     print "     Done.\n"
-    print "Preparing unknown files for recognition.\n"
+    print "Preparing unknown images for recognition.\n"
 
     j = 0
     n_uimages = len(unknownfiles) #number of unknown images
-    ukdataset = np.zeros((n_uimages,50,50), dtype=np.float32)
+    ukdataset = np.zeros((n_uimages,50,50), dtype=np.float32) #unknown dataset
     while j < n_uimages:
-
+    #perform the same proces as above, iterating through the unknownfiles array
+    #and adding the image representations to the uknown dataset
         image = Image.open(unknownfiles[j][0])
         image = image.convert('RGB')
         image = grayscale_image(image)
@@ -537,26 +542,37 @@ elif(sys.argv[4] == '3'):
         udata = np.asarray(image, dtype=np.float32 )
         udata /= 255.0
         udata = udata.mean(axis=2) 
-        #print data[0]
+        ###print data[0]
         ukdataset[j, ...] = udata
         j = j + 1
     print "     Done.\n"
+
+    #reshaping the arrays is necessary to match the input requirements for
+    #the fit function of the classifier
     kre = kdataset.reshape((n_images, -1)) #known dataset reshaping
     ukre = ukdataset.reshape((n_uimages,-1)) #unknown dataset reshaping
 
+    #create two arrays to represent the features of the images. The algorithm
+    #uses this array to learn to distinguish between the two types of images
     a = np.zeros((len(list0),), dtype=np.int)
     b = np.ones((len(list1),), dtype=np.int)
     targets = np.concatenate((a,b),axis=0)
-    #print targets
-    
+    ###print targets
+
+    #initiate the classifier, with the Simple Machine Vector algorithm
     classifier = svm.SVC(gamma=0.001)
+    #fit the known dataset and their target designation to the classifier
+    #this is where the program learns
     classifier.fit(kre,targets)
 
+    #classifier uses the learned knowledge on the unknown dataset,
+    #returning an array of the predicted values for each image in the
+    #dataset
     print "Predicting...\n"
     predicted = classifier.predict(ukre)
     print "     Done.\n"
-    print "Here are the results: \n"
-    print predicted
+    ###print "Here are the results: \n"
+    ###print predicted
 
     #assign the predicted values to the "to-be" output file
     for line in range(len(unknownfiles)):
@@ -567,4 +583,4 @@ with open(sys.argv[3], 'w+') as outputfile:
     for elem in unknownfiles:
         outputfile.write(" ".join(str(v) for v in elem))
         outputfile.write("\n")
-print "Results has been written into the output file."
+print "Results have been written into the output file."
