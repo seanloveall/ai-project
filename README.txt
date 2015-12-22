@@ -46,4 +46,4 @@ You will need to install Visual Studios. Here's the link to install the Visual S
 
 http://download.microsoft.com/download/A/5/4/A54BADB6-9C3F-478D-8657-93B3FC9FE62D/vcsetup.exe
 
-We strongly recommend running Command Prompt in Administrative mode if you run into any issues.
+We strongly recommend running Command Prompt in Administrative mode if you run into any issues during installation.
