@@ -3,8 +3,8 @@ C:/Python27/photos/accordion/image_0052.jpg 0.03
 C:/Python27/photos/accordion/image_0053.jpg 0.03
 C:/Python27/photos/accordion/image_0054.jpg 0.03
 C:/Python27/photos/accordion/image_0055.jpg 0.03
-C:/Python27/photos/brain/image_0051.jpg 0.97
-C:/Python27/photos/brain/image_0052.jpg 0.97
-C:/Python27/photos/brain/image_0053.jpg 0.96
-C:/Python27/photos/brain/image_0054.jpg 0.04
-C:/Python27/photos/brain/image_0055.jpg 0.03
+C:/Python27/photos/airplanes/image_0051.jpg 0.97
+C:/Python27/photos/airplanes/image_0052.jpg 0.97
+C:/Python27/photos/airplanes/image_0053.jpg 0.97
+C:/Python27/photos/airplanes/image_0054.jpg 0.97
+C:/Python27/photos/airplanes/image_0055.jpg 0.97
