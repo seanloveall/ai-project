@@ -266,6 +266,8 @@ if(sys.argv[4] == '1'):
         score1 = 0
 
         width, height = image.size
+        maxscore0 = 0
+        maxscore1 = 0
         for x in range(width):
             for y in range(height):
                 red, green, blue = image.getpixel((x, y))
@@ -274,64 +276,59 @@ if(sys.argv[4] == '1'):
                 num = abs(avg0[0][x][y] - red)
                 if(num <= moe): #if within margin of error, give it a bonus point
                     score0 += 1
+                    maxscore0 += 1
                 num = float(num) / 255
                 score0 = score0 + (1 - num)
+                maxscore0 += 1
 
                 for a in range(len(avg0)): #compare against other averages
                     if a == 0: #skip total average since it was already done above
                         continue
                     elif images0[a] == 1: #if only one image is in this average, then lower the margin of error
                         num = abs(avg0[a][x][y] - red)
-                        if(num <= (moe/2)):
+                        if(num <= (float(moe)/2)):
                             num = float(num) / 255
                             score0 = score0 + ((1 - num) * 2) #weighted if within the more restricted margin of error
+                            maxscore0 += 2
                     else:
                         num = abs(avg0[a][x][y] - red)
                         if(num <= moe): #if within margin of error, then add to score (weighted)
                             num = float(num) / 255
                             score0 = score0 + ((1 - num) * images0[a])
+                            maxscore0 += images0[a]
 
 
                 #check second dataset
                 num = abs(avg1[0][x][y] - red)
                 if(num <= moe):
                     score1 += 1
+                    maxscore1 += 1
                 num = float(num) / 255
                 score1 = score1 + (1 - num)
+                maxscore1 += 1
 
                 for a in range(len(avg1)): #compare against other averages
                     if a == 0:
                         continue
                     elif images1[a] == 1: #if only one image is in this average, then lower the margin of error
                         num = abs(avg1[a][x][y] - red)
-                        if(num <= (moe/2)):
+                        if(num <= (float(moe)/2)):
                             num = float(num) / 255
                             score1 = score1 + ((1 - num) * 2) #weighted if within the more restricted margin of error
+                            maxscore1 += 2
                     else:
                         num = abs(avg1[a][x][y] - red)
                         if(num <= moe): #if within margin of error, then add to score (weighted)
                             num = float(num) / 255
                             score1 = score1 + ((1 - num) * images1[a])
+                            maxscore1 += images1[a]
 
-        pix = size * size
         #compare the scores to see which dataset the unknown photo most likely belongs to
         if(score0 > score1):
-            maxscore = 0
-            for a in range(len(images0)):
-                if a == 0:
-                    continue
-                maxscore += images0[a]
-            maxscore = size * size * 2 * maxscore
-            num = score0 / maxscore
-            num = abs(num - 0.5)
+            num = score0 / maxscore0
+            num = abs(1 - num)
         else:
-            maxscore = 0
-            for a in range(len(images1)):
-                if a == 0:
-                    continue
-                maxscore += images1[a]
-            maxscore = size * size * 2 * maxscore
-            num = score1 / maxscore
+            num = score1 / maxscore1
             if(num <= 0.5):
                 num = num + 0.5
 
@@ -344,7 +341,6 @@ if(sys.argv[4] == '1'):
 
     ####
 elif(sys.argv[4] == '2'):
-    # scoot
     i = 0
     avg0 = [[0 for x in range(50)] for x in range(50)] 
     avg1 = [[0 for x in range(50)] for x in range(50)]
