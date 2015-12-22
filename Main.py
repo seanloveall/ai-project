@@ -341,6 +341,7 @@ if(sys.argv[4] == '1'):
 
     ####
 elif(sys.argv[4] == '2'):
+    # scoot
     i = 0
     avg0 = [[0 for x in range(50)] for x in range(50)] 
     avg1 = [[0 for x in range(50)] for x in range(50)]
@@ -348,6 +349,8 @@ elif(sys.argv[4] == '2'):
     count1 = 2500/len(list1)
     x = 0
     y = 0
+
+    print "Beginning to learn from first dataset..."
     while i < len(list0):
         image = Image.open(list0[i])
         image = image.convert('RGB')
@@ -356,7 +359,7 @@ elif(sys.argv[4] == '2'):
         image = resize_and_crop(image, (50, 50))
         
         width, height = image.size
-        for j in range(count0):
+        for j in range(int(count0)):
             #print x
             #print y
             avg0[x][y] = image.getpixel((x, y))
@@ -390,6 +393,7 @@ elif(sys.argv[4] == '2'):
             else:
                  y += 1
 
+    print "Done with dataset 1. Beginning to learn from dataset 2..."
     #starting to create it for list1
     x = 0
     y = 0
@@ -402,7 +406,7 @@ elif(sys.argv[4] == '2'):
         image = resize_and_crop(image, (50, 50))
         
         width, height = image.size
-        for j in range(count1):
+        for j in range(int(count1)):
             avg1[x][y] = image.getpixel((x, y))
             if(x == 49 and y == 49):
                 break
@@ -437,6 +441,7 @@ elif(sys.argv[4] == '2'):
     #print x
     #print y
 
+    print "Done learning. Beginning to compare with unknown images..."
     #Learing complete. Beginning to compare with unknown images
     i = 0
     while i < len(unknownfiles):
@@ -471,24 +476,25 @@ elif(sys.argv[4] == '2'):
 
 
         pix = 50 * 50
-        print score0
-        print score1
-        num = float(score)/float(pix)
+        #print score0
+        #print score1
+        num = round(float(score)/float(pix), 2)
         if(num < 0.5):
             #num = float(score0) / float(pix)
             #num = abs(num - 0.5)
-            unknownfiles[i][1] = "0-"+str(num)
+            unknownfiles[i][1] = str(num)
         else:
             #num = float(score1) / float(pix)
             #if(num <= 0.5):
               #num = num + 0.5
-            unknownfiles[i][1] = "1-"+str(num)
+            unknownfiles[i][1] = str(num)
 
         #
         #print unknownfiles[i][0], " ", (float(score)/float(2500))
         #print score, " ", score2
         i = i + 1
-    
+
+    print "Finished comparisons..."
     #print avg0
     #print avg1   
 elif(sys.argv[4] == '3'):
