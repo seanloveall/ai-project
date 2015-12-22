@@ -1,8 +1,8 @@
-The program was written in python, and converted to an executable so no additional libraries will need to be installed. The executable can only run properly using command prompt as there is no GUI provided. The program was developed using Python 2.7 on Windows 10.
+Written in Python 2.7. The first argument is a text file that contains a list of paths to images as well as an indicator of 0 or 1. The second argument is a text file that contains a list of paths to images. The third argument is the path to the output file. The fourth argument is a number that tells the application which algorithm to use.
 
-In order to run the executable please use the following format:
+Format of Command Line Execution
 
-Main.exe [file-path] [file-path] [file-path] #
+python.exe Main.py [file-path] [file-path] [file-path] #
 
 [file-path] refers to the path of the file to a text file. The first [file-path] should be an input file that contains two datasets of known photos with the following format:
 
@@ -23,22 +23,27 @@ The third [file-path] should be a blank text file where the program will be writ
 
 Here's an example of calling the executable on command line:
 
-ai-project\dist\Main.exe C:/Python27/ai-project/input.txt C:/Python27/ai-project/input2.txt C:/Python27/ai-project/output.txt 1
-
-
-
---------------------------------------------------------------
-
-Written in Python. The first argument is a text file that contains a list of paths to images as well as an indicator of 0 or 1. The second argument is a text file that contains a list of paths to images. The third argument is the path to the output file. The fourth argument is a number that tells the application which algorithm to use.
-
-Example of Command Line Execution
-
 python.exe ai-project\Main.py C:/Python27/ai-project/input.txt C:/Python27/ai-project/input2.txt C:/Python27/ai-project/output.txt 2
 
-Note - The implementation of all algorithms uses the python PIL library. 
 
-Note - Although the executable will work on its own, in order to compile and successfully run algorithm #3, the additional following libraries are required:
+Required Libraries
+
+The implementation of all algorithms uses the python PIL library. 
+
+In order to run algorithm #3, the additional following libraries are required:
+
 	Numpy (>= 1.6.1)
 	Scipy (>= 0.9)
 	Scikit-learn
+
 The libraries for Numpy and Scipy are attached. Scikit-learn can be aquired using the command "pip install scikit-learn"
+
+Please note that Numpy is written in C++ so if you receive this error when running it:
+
+	Microsoft Visual C++ 9.0 is required (Unable to find vcvarsall.bat).
+
+You will need to install Visual Studios. Here's the link to install the Visual Studios that we used to run the script:
+
+http://download.microsoft.com/download/A/5/4/A54BADB6-9C3F-478D-8657-93B3FC9FE62D/vcsetup.exe
+
+We strongly recommend running Command Prompt in Administrative mode if you run into any issues.
