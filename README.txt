@@ -1,4 +1,6 @@
-The program was written in python, and converted to an executable so no additional libraries will need to be installed. The executable will need to be run on command line as there is no GUI provided. The program was developed using Python 2.7 on Windows 10. In order to run the executable please use the following format:
+The program was written in python, and converted to an executable so no additional libraries will need to be installed. The executable can only run properly using command prompt as there is no GUI provided. The program was developed using Python 2.7 on Windows 10.
+
+In order to run the executable please use the following format:
 
 Main.exe [file-path] [file-path] [file-path] #
 
@@ -17,7 +19,7 @@ C:/Python27/photos/unknown/image_0053.jpg
 C:/Python27/photos/unknown/image_0054.jpg
 
 
-The third [file-path] should be a blank text file where the results of the program will be writing to. The last argument # is a number that should be 1, 2, or 3. The number refers to which algorithm that you would like the program to run.
+The third [file-path] should be a blank text file where the program will be writing the results to. The last argument # is a number that should be 1, 2, or 3. The number refers to which algorithm that you would like the program to run.
 
 Here's an example of calling the executable on command line:
 
