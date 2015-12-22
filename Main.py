@@ -5,12 +5,6 @@ import math
 from PIL import Image
 from PIL import ImageFilter
 
-#    shortcut for lazy rafi
-##sys.argv = ["placeholder",
-##            "C:/Users/rpcoo/Documents/GitHub/ai-project/input.txt",
-##            "C:/Users/rpcoo/Documents/GitHub/ai-project/input2.txt",
-##            "C:/Users/rpcoo/Documents/GitHub/ai-project/test/output.txt", "3" ]
-
 print "  =====Image Recognition Software=====  \n"
 
 def iround(num):
@@ -577,10 +571,15 @@ elif(sys.argv[4] == '3'):
     #assign the predicted values to the "to-be" output file
     for line in range(len(unknownfiles)):
          unknownfiles[line][1] = predicted[line]
-
+else:
+    print "Please provide a number of 1, 2, or 3 to select an algorithm to run"
+    raw_input("Press Enter to exit...")
+    sys.exit()
+    
 #outputs the data
 with open(sys.argv[3], 'w+') as outputfile:
     for elem in unknownfiles:
         outputfile.write(" ".join(str(v) for v in elem))
         outputfile.write("\n")
 print "Results have been written into the output file."
+raw_input("Press Enter to exit...")
