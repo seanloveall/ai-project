@@ -6,10 +6,10 @@ from PIL import Image
 from PIL import ImageFilter
 
 #    shortcut for lazy rafi
-sys.argv = ["placeholder",
-            "C:/Users/rpcoo/Documents/GitHub/ai-project/input.txt",
-            "C:/Users/rpcoo/Documents/GitHub/ai-project/input2.txt",
-            "C:/Users/rpcoo/Documents/GitHub/ai-project/test/output.txt", "3" ]
+##sys.argv = ["placeholder",
+##            "C:/Users/rpcoo/Documents/GitHub/ai-project/input.txt",
+##            "C:/Users/rpcoo/Documents/GitHub/ai-project/input2.txt",
+##            "C:/Users/rpcoo/Documents/GitHub/ai-project/test/output.txt", "3" ]
 
 print "  =====Image Recognition Software=====  \n"
 
